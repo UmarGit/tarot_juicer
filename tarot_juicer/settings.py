@@ -27,7 +27,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
 
-SECRET_KEY = config('SECRET_KEY')
+SECRET_KEY = 's!$*c*av#8ppk!-yzzo3x%we)_@ag_ia-*25%tu%ciq69)3-u4'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -170,3 +170,4 @@ MESSAGE_TAGS = {
 AUTHENTICATED_VISITOR_USERNAME = "authenticated_visitor"
 AUTHENTICATED_VISITOR_PASSWORD = "AjeuAjs2@#7sg"
 PASSPHRASE = "YourMagicPassphrase"
+LOGIN_URL='/'
