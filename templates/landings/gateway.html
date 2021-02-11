@@ -1,12 +1,13 @@
 <!-- <center>{% block title %} (null) so far {% endblock %}</center> -->
 {% load static %}
 
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link rel="stylesheet" href="{% static 'css/gateway.css' %}" type="text/css">
 
 {% block content %}
 
 <section id="login" class="bg-light py-5">
-    <div class="container">
+    <div>
       {% include 'partials/_alerts.html' %}
     </div>
     <h1> This website is hermetically sealed. </h1>
@@ -48,7 +49,7 @@
           <label for="passphrase">Enter Your Pass Phrase:</label>
           <input type="text" name="passphrase" class="form-control" required>
         </div>
-        <input type="submit" value="Bypass" class="btn btn-secondary btn-block">
+        <input type="submit" value="Submit" class="btn btn-secondary btn-block">
 
       </form>
     </div>

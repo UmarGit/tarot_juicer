@@ -46,18 +46,18 @@
     
     <!-- Original concept borrowed from Marco Dell'Anna in a CodePen titled ALIEN - Deviation of microcosm, source: https://codepen.io/plasm/pen/JNPXxg  -->
 
+    <!-- <center><img width="15%" src="{% static 'img/compass1-black-with-blur4.png' %}"></center> -->
 
-    <h1>Tarot</h1>
-    
-    <center></center>
-
+    <!-- <h1 Tarot</h1> -->
+    <!-- <h1>GLOBAL <br> INITIATION</h1> -->
+    <h1>TAROT</h1>  
     <!-- To F/LOSS/GG:  -->
     <h3><a href="{% url 'slashdot' %}">@ SLASHDOT</a></h3> 
     
     <!-- To Forrest Gump article:  -->
     <h3>
       <div class="tooltip">
-        <a href="#">@ HOLLYWOOD</a> 
+        <a href="#">@ FILM</a> 
         <span class="tooltiptext">Pending</span>
       </div>
     </h3> 
@@ -65,13 +65,13 @@
     <!-- To St Paul:  -->
     <h3><a href="{% url 'watchtower' %}">@ THE WATCHTOWER</a></h3> 
     
-    <!-- Special article:  -->
+    <!-- Special article:  
     <h3>
       <div class="tooltip">
         <a href="#">@ AMERIKA</a>
         <span class="tooltiptext">Pending</span>
       </div>
-    </h3> 
+    </h3> -->
     
     <hr>    
 
@@ -86,8 +86,9 @@
     
     <!-- To generic tarot card landing page (random selection):  -->
     <h3><a href="{% url 'get_tarot_key_generator' %}">(Tarot at random)</a></h3> 
-
-    <h3><a href="{% url 'logout' %}">logout ?</a></h3> 
+    {% if protection.enable_protection %}
+      <h3><a href="{% url 'logout' %}">Logout?</a></h3> 
+    {% endif %}
    
     <!-- <figure>
     <div class="videoWrapper">

@@ -15,6 +15,8 @@ import os
 import django_heroku
 from decouple import config
 import dj_database_url
+from dotenv import load_dotenv
+load_dotenv()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -27,7 +29,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
 
-SECRET_KEY = 's!$*c*av#8ppk!-yzzo3x%we)_@ag_ia-*25%tu%ciq69)3-u4'
+SECRET_KEY = str(os.getenv('SECRET_KEY'))
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -94,29 +96,12 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     },
 }
-'''
-    # default will be updated / replaced  by db_from_env (heroku)
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-    },
-    # my local postgres database for testing script automation
-    'local': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'USER': 'wurst',
-        'NAME': 'wurst',
-        'PASSWORD': 'tarotdb',
-    },
-    # the sqlite database, later will switch between
-    'sqlite': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    },
-'''
-
-
+print(DATABASES)
 # HEROKU - replace / update default database with heroku postgresql
-db_from_env = dj_database_url.config(conn_max_age=600)
-DATABASES['default'].update(db_from_env)
+db_from_env = dj_database_url.config(conn_max_age=600, ssl_require=True)
+# DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=False)
+
+print(DATABASES)
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -162,12 +147,9 @@ MEDIA_ROOT = os.path.join(STATIC_ROOT, 'img')
 MEDIA_URL = 'img/'
 
 django_heroku.settings(locals())
+# del DATABASES['default']['OPTIONS']['sslmode']
+# print(DATABASES)
 
 MESSAGE_TAGS = {
     messages.ERROR: 'danger',
 }
-
-AUTHENTICATED_VISITOR_USERNAME = "authenticated_visitor"
-AUTHENTICATED_VISITOR_PASSWORD = "AjeuAjs2@#7sg"
-PASSPHRASE = "YourMagicPassphrase"
-LOGIN_URL='/'
