@@ -86,23 +86,23 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'tarot_juicer.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
+DATABASES = {}
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    },
-}
+DB_URL = str(os.getenv('DATABASE_URL'))
+
+if DB_URL != 'None':
+    DATABASES = {'default': dj_database_url.config(env="DATABASE_URL", default=DB_URL, conn_max_age=600)}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        },
+    }
+print(DB_URL)
 print(DATABASES)
-# HEROKU - replace / update default database with heroku postgresql
-db_from_env = dj_database_url.config(conn_max_age=600, ssl_require=True)
-# DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=False)
-
-print(DATABASES)
-
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
 
@@ -146,9 +146,9 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 MEDIA_ROOT = os.path.join(STATIC_ROOT, 'img')
 MEDIA_URL = 'img/'
 
-django_heroku.settings(locals())
-# del DATABASES['default']['OPTIONS']['sslmode']
-# print(DATABASES)
+django_heroku.settings(locals(), databases=False)
+#del DATABASES['default']['OPTIONS']['sslmode']
+#print(DATABASES)
 
 MESSAGE_TAGS = {
     messages.ERROR: 'danger',
