@@ -5,12 +5,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages, auth
 from django.contrib.auth.models import User
 from django.urls import reverse
-<<<<<<< HEAD
-from django.contrib.auth.decorators import login_required
-from accounts.models import AuthToggle,PassPhrase , create_user_if_not_exists
-=======
 from accounts.models import AuthToggle,PassPhrase
->>>>>>> 84e98d77741367200d9a7a02878019ee896e732b
 
 def register(request):
     if request.method == "POST":
