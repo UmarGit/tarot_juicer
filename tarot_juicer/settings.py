@@ -32,7 +32,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = str(os.getenv('SECRET_KEY'))
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG')
 
 ALLOWED_HOSTS = ['*']
 
@@ -88,20 +88,23 @@ WSGI_APPLICATION = 'tarot_juicer.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
-DATABASES = {}
 
-DB_URL = str(os.getenv('DATABASE_URL'))
+SELECTED_DB = ""
 
-if DB_URL != 'None':
-    DATABASES = {'default': dj_database_url.config(env="DATABASE_URL", default=DB_URL, conn_max_age=600)}
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        },
+VALUE = os.getenv('SELECT_DB')
+
+if VALUE == "0":
+    SELECTED_DB = "HEROKU_POSTGRESQL_SILVER_URL"
+elif VALUE == "1":
+    SELECTED_DB = "HEROKU_POSTGRESQL_NAVY_URL"
+
+DATABASES = {
+    'default': dj_database_url.config(
+        env=SELECTED_DB,
+        default='sqlite:///'+os.path.join(BASE_DIR, 'db.sqlite3'), 
+        conn_max_age=600)
     }
-print(DB_URL)
+
 print(DATABASES)
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
