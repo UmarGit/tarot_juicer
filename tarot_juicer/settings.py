@@ -28,14 +28,29 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 
 # SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
-
+# tarot!7l=5rh&^(_uug%qd845^^(b40e)bl6kyww$z89f-m#tu=8k&tjuicer
 SECRET_KEY = str(os.getenv('SECRET_KEY'))
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG')
 
-ALLOWED_HOSTS = ['*']
+if os.environ.get('DJANGO_DEBUG', '') == 'True':
+    # These are testing settings:
+    DEBUG = True 
+    SECURE_HSTS_SECONDS = 10
+    SECURE_SSL_REDIRECT = False
+    SESSION_COOKIE_SECURE = False
+    CSRF_COOKIE_SECURE = False
+else:
+    # These are prod settings:
+    DEBUG = True # Set to `False` for prod when done testing prod (for when the project is finally Live)
+    SECURE_HSTS_SECONDS = 10
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
 
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS').split(' ')  if 'ALLOWED_HOSTS' in os.environ else ['*']
+
+ADMIN_PATH = os.environ.get('ADMIN_PATH')+'/' if 'ADMIN_PATH' in os.environ else 'admin/'
 
 # Application definition
 
@@ -89,23 +104,19 @@ WSGI_APPLICATION = 'tarot_juicer.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-SELECTED_DB = ""
+# To use AWS Postgres db’s locally run:
+# `export DATABASE_URL=postgres://USER:PASSWORD@HOST:PORT/NAME` 
 
-VALUE = os.getenv('SELECT_DB')
-
-if VALUE == "0":
-    SELECTED_DB = "HEROKU_POSTGRESQL_SILVER_URL"
-elif VALUE == "1":
-    SELECTED_DB = "HEROKU_POSTGRESQL_NAVY_URL"
+DATABASES = {}
 
 DATABASES = {
-    'default': dj_database_url.config(
-        env=SELECTED_DB,
-        default='sqlite:///'+os.path.join(BASE_DIR, 'db.sqlite3'), 
-        conn_max_age=600)
-    }
+   'default': dj_database_url.config(
+       default='sqlite:///'+os.path.join(BASE_DIR, 'db.sqlite3'),
+       conn_max_age=600)
+   }
 
 print(DATABASES)
+
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
 
@@ -149,9 +160,10 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 MEDIA_ROOT = os.path.join(STATIC_ROOT, 'img')
 MEDIA_URL = 'img/'
 
-django_heroku.settings(locals(), databases=False)
-#del DATABASES['default']['OPTIONS']['sslmode']
-#print(DATABASES)
+django_heroku.settings(locals())
+# Because the app is not deployed to a custom domain
+if 'OPTIONS' in DATABASES['default']:
+  del DATABASES['default']['OPTIONS']['sslmode']
 
 MESSAGE_TAGS = {
     messages.ERROR: 'danger',
