@@ -77,7 +77,7 @@ global attempts, maxAttempts, enableTimer
 
 attempts = 0
 
-maxAttempts = 3
+maxAttempts = 10
 
 enableTimer = False
 
@@ -109,7 +109,7 @@ def index(request):
                 global attempts, enableTimer
                 messages.error(request, 'Timeout Reached: you had attempted ' + str(attempts) + " attempts please wait 1 hour to continue")
                 # Time in seconds
-                time.sleep(60) # 3600 seconds = 1 hr, 60 seconds = 1 min
+                time.sleep(3600) # 3600 seconds = 1 hr, 60 seconds = 1 min
                 attempts = 0
                 enableTimer = False
 
@@ -134,6 +134,8 @@ def portal(request):
     return render(request, 'landings/portal.html', context)
 
 def logout(request):
+    global attempts
+    attempts = 0
     return redirect('index')
 
 def pending(request):
